@@ -1,0 +1,62 @@
+header, div, input, footer{
+    margin-top:20px;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#title{
+    font-size: large;
+    font-weight: bold;
+}
+
+#information_head{
+    font-size:small;
+    color: dimgrey;
+}
+
+#elections{
+    text-align: center;
+}
+
+.election_button{
+    margin:auto;
+    width:fit-content;
+    font-size: medium;
+    background-color: khaki;
+    color: #000;
+}
+
+#election_dates,#today{
+    color:dimgrey;
+    font-size: small;
+}
+
+.election_view_button{
+    display: block;
+}
+
+#election_info{
+    color:dimgrey;
+    font-size: small;
+    display:none;
+}
+
+.answer{
+    margin:auto;
+    display: block;
+}
+
+#button_area{
+    display: block;
+}
+
+#before_button,#next_button{
+    margin:auto;
+    width:fit-content;
+    font-size: medium;
+    background-color: khaki;
+    color: #000;
+}
+

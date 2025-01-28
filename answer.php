@@ -61,36 +61,21 @@
     <script type="text/javascript" src="script.js"></script>
   </head>
   <body id="answer">
-    <script>
-        //保存変数
-        var answer = [];
-        //初期処理
-        window.onload = (event) => {
-            //プログレスバー初期化
-            document.getElementById("progress_bar").value = 0;
-            //前へボタン非表示
-            document.getElementById("before_button").display = 'none';
-            //初回質問セット
-            document.getElementById("questionnaire_text").value = '<?php echo $questionnaire[0]['questionnaire_text']; ?>';
-        };
-        //表示する質問を変更する処理
-
-    </script>
     <header>主様の選択 ©</header>
     <div id="election_name"><?php echo $election_name; ?></div>
     <div id="election_dates">告示：<?php echo $start_date; ?>　投開票：<?php echo $election_date; ?></div>
     <div id="today">今日：<?php echo date("Y-m-d"); ?></div>
-    <progress id="progress_bar" max="<?php echo count($questionnaire); ?>" value="0"></progress>
     <label id="questionnaire_text"></label>
     <form method="POST">
         <input type="hidden" name="election_id" value="<?php echo $election_id; ?>" />
+        <p>次の分野について、あなたの優先順位をつけてください。同順位はできません。かならず順位をつけてください。</p>
         <input type="radio" id="answer1" name="answer" class="answer" value="1" /><label for="answer1">そう思う</label>
         <input type="radio" id="answer2" name="answer" class="answer" value="2" /><label for="answer2">どちらかと言えばそう思う</label>
         <input type="radio" id="answer3" name="answer" class="answer" value="3" /><label for="answer3">どちらでもない</label>
         <input type="radio" id="answer4" name="answer" class="answer" value="4" /><label for="answer4">どちらかと言えばそう思わない</label>
         <input type="radio" id="answer5" name="answer" class="answer" value="5" /><label for="answer5">そう思わない</label>
         <div id="button_area">
-            <input type="button" id="before_button" onclick="" value="前へ" />
+            <input type="submit" id="check_button" value="確認する" />
             <input type="button" id="next_button" onclick="" value="次へ" />
         </div>
     </form>

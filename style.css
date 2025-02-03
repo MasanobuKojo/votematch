@@ -1,4 +1,8 @@
-header, div, input, footer{
+body{
+    background-color: darkmagenta;
+}
+
+header, div, input, footer, h1,h2,h3,p{
     margin-top:20px;
     margin-bottom: auto;
     margin-left: auto;
@@ -6,30 +10,39 @@ header, div, input, footer{
     text-align: center;
 }
 
+input[type="button"],input[type="submit"]{
+    width:300px;
+}
+
 #title{
-    font-size: large;
     font-weight: bold;
 }
 
 #information_head{
     font-size:small;
-    color: dimgrey;
+    color: black;
+    display:block;
+}
+
+#message{
+    font-weight: bold;
 }
 
 #elections{
     text-align: center;
 }
 
-.election_button{
+.election_button,#election_name{
     margin:auto;
     width:fit-content;
     font-size: medium;
+    font-weight: bold;
     background-color: khaki;
     color: #000;
 }
 
 #election_dates,#today{
-    color:dimgrey;
+    color:white;
     font-size: small;
 }
 
@@ -37,10 +50,11 @@ header, div, input, footer{
     display: block;
 }
 
-#election_info{
-    color:dimgrey;
+#information_contents,#election_info, .result_info, .candidate_info{
+    color:white;
     font-size: small;
     display:none;
+    margin-top: 1px;
 }
 
 .answer{
@@ -48,8 +62,17 @@ header, div, input, footer{
     display: block;
 }
 
-#button_area{
+#questionnaire{
+    margin-top:20px;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
     display: block;
+}
+
+.button_area{
+    display: grid;
 }
 
 #before_button,#next_button{
@@ -60,3 +83,54 @@ header, div, input, footer{
     color: #000;
 }
 
+#confirm_list{
+    width:fit-content;    
+}
+
+.rank_top{
+    font-size: large;
+    font-weight: bold;
+}
+
+.rank_match{
+    font-size: medium;
+    font-weight: bold;
+    margin-top:1px;
+}
+
+.rank {
+    text-align: left;
+}
+
+.rank_button,.candidate_button{
+    margin:auto;
+}
+
+header,footer {
+    font-size:small;
+    color:white;
+}
+
+.result_set{
+    background-color: cadetblue;
+    width: fit-content;
+}
+
+.q_row{
+    background-color: midnightblue;
+    margin-top:10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding:2px;
+}
+
+.q_row p{
+    text-align: left;
+    margin-top:1px;
+}
+
+.policy{
+    font-size: medium;
+    font-weight: bold;
+    margin-top:1px;
+}

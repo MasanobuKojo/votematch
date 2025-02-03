@@ -1,8 +1,8 @@
 <?php
     //選挙IDがパラメータにあるか確認
-    if($_POST["election_id"] !== null && $_POST["election_id"] !== ""){
+    if(isset($_POST["election_id"]) && $_POST["election_id"] !== ""){
         //検証
-        $election_id = $_POST["election_id"];
+        $election_id = htmlspecialchars($_POST["election_id"]);
         //DB接続
         $mysqli = new mysqli("localhost", "root", "", "nushisama_choice", 3306);
         if($mysqli->connect_error){
@@ -22,6 +22,7 @@
           $sql->fetch();  
         } catch(Exception $e) {
           echo $e->getMessage();
+          $sql->close();
           $mysqli->close();
           exit;
         }
@@ -41,8 +42,21 @@
           }
         } catch(Exception $e) {
           echo $e->getMessage();
+          $sql->close();
           $mysqli->close();
           exit;
+        }
+        //POST変数に回答データがあるか:戻ってきた場合
+        $answers = [];
+        if(isset($_POST["answers"]) && $_POST["answers"] !== ""){
+          //回答データを転記
+          $answers = explode(",",htmlspecialchars($_POST["answers"]));
+          if(count($answers) !== count($questionnaire)){
+            echo "<p>選択されていない順位があります。はじめからやり直してください。</p><a href='./index.php'>トップに戻る</a>";
+            $sql->close();
+            $mysqli->close();
+            exit;
+          }
         }
         //DB切断
         $sql->close();
@@ -56,29 +70,54 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $election_name; ?>|主様の選択</title>
+    <title><?php echo $election_name; ?>|王の選択</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="icon" href="favicon.ico">
     <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body id="answer">
-    <header>主様の選択 ©</header>
+    <header id="title_head">ボートマッチングアプリ | 王の選択</header><br/>
     <div id="election_name"><?php echo $election_name; ?></div>
-    <div id="election_dates">告示：<?php echo $start_date; ?>　投開票：<?php echo $election_date; ?></div>
-    <div id="today">今日：<?php echo date("Y-m-d"); ?></div>
-    <label id="questionnaire_text"></label>
-    <form method="POST">
+    <div id="election_dates">告示：<?php echo date_format(date_create_from_format('Y-m-d', $start_date),'Y年n月j日'); ?>　投開票：<?php echo date_format(date_create_from_format('Y-m-d', $election_date),'Y年n月j日'); ?></div>
+    <div id="today">本日：<?php echo date("Y年n月j日"); ?></div>
+    <div id="message">
+    <p>「王様、次の質問にお答えください」</p>
+    <p>「次の分野について、<br/>
+    王様が優先すべきと考える順番に、<br/>
+    1位から17位まで選択してください。<br/>
+    残念ながら、同順位にはできません。<br/>
+    かならず順位をつけていただく必要があります。」</p>
+    <p>「一度選択した分野は他の順位では選択できません<br/>
+    （灰色になります）。」</p>
+    <p>「既に選択した分野を別の順位にしたい場合は、<br/>
+    一度分野を選択している順位で別の分野を選択するか、<br/>
+    【-選択してください-】に戻してから、<br/>
+    正しい順位で選択してください。」</p>
+    </div>
+    <?php for($i = 1; $i <= count($questionnaire); $i++): ?>
+      <div class="select_set">
+      <label for="rank<?php echo $i; ?>"><?php echo $i; ?>位</label>
+      <select class="answer_list" name="answer<?php echo $i; ?>" id="answer<?php echo $i; ?>" onchange="changeOption(<?php echo $i; ?>)">
+        <option value="" <?php if(count($answers) == 0) echo "selected "; ?>>-選択してください-</option>
+        <?php foreach($questionnaire as $q): ?>
+          <option value="<?php echo $q[0]; ?>" <?php if(count($answers) != 0 && $answers[$i-1] == $q[0]) echo "selected "; ?>><?php echo $q[1]; ?></option>
+        <?php endforeach; ?>
+      </select>
+      <input type="hidden" id="selected<?php echo $i; ?>" value="" />
+      </div>
+    <?php endfor; ?>
+    <form method="POST" id="questionnaire" action="./confirm.php" >
         <input type="hidden" name="election_id" value="<?php echo $election_id; ?>" />
-        <p>次の分野について、あなたの優先順位をつけてください。同順位はできません。かならず順位をつけてください。</p>
-        <input type="radio" id="answer1" name="answer" class="answer" value="1" /><label for="answer1">そう思う</label>
-        <input type="radio" id="answer2" name="answer" class="answer" value="2" /><label for="answer2">どちらかと言えばそう思う</label>
-        <input type="radio" id="answer3" name="answer" class="answer" value="3" /><label for="answer3">どちらでもない</label>
-        <input type="radio" id="answer4" name="answer" class="answer" value="4" /><label for="answer4">どちらかと言えばそう思わない</label>
-        <input type="radio" id="answer5" name="answer" class="answer" value="5" /><label for="answer5">そう思わない</label>
-        <div id="button_area">
-            <input type="submit" id="check_button" value="確認する" />
-            <input type="button" id="next_button" onclick="" value="次へ" />
+        <input type="hidden" name="answers" id="answers" value="" />
+        <div class="button_area">
+          <input type="button" class="button" id="check_button" onclick="confirm()" value="確認する" />
+          <input type="submit" class="button" id="show_election" formaction="./election.php" value="選挙に戻る" />
         </div>
     </form>
-    <footer><a href="./index.php">トップに戻る</a></footer>
+    <footer>
+      <a href="./index.php"><input type="button" id="top_button" value="トップに戻る" /></a>
+      <p>© 豊の国をつくる会</p>
+    </footer>
   </body>
 </html>

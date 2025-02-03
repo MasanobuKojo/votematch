@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Sawarabi+Mincho');
+
+*{
+    font-family: 'Sawarabi Mincho', sans-serif;
+}
+
 body{
-    background-color: darkmagenta;
+    background-color: #FBD319;
 }
 
 header, div, input, footer, h1,h2,h3,p{
@@ -8,6 +14,10 @@ header, div, input, footer, h1,h2,h3,p{
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+}
+
+#yushinokai_logo{
+    width: 100px;
 }
 
 input[type="button"],input[type="submit"]{
@@ -42,7 +52,7 @@ input[type="button"],input[type="submit"]{
 }
 
 #election_dates,#today{
-    color:white;
+    color:black;
     font-size: small;
 }
 
@@ -51,7 +61,7 @@ input[type="button"],input[type="submit"]{
 }
 
 #information_contents,#election_info, .result_info, .candidate_info{
-    color:white;
+    color:black;
     font-size: small;
     display:none;
     margin-top: 1px;
@@ -108,16 +118,16 @@ input[type="button"],input[type="submit"]{
 
 header,footer {
     font-size:small;
-    color:white;
+    color:black;
 }
 
 .result_set{
-    background-color: cadetblue;
+    background-color: greenyellow;
     width: fit-content;
 }
 
 .q_row{
-    background-color: midnightblue;
+    background-color: burlywood;
     margin-top:10px;
     margin-left: 10px;
     margin-right: 10px;
@@ -129,7 +139,13 @@ header,footer {
     margin-top:1px;
 }
 
-.policy{
+.policy,.rank_comment{
+    font-size: small;
+    font-weight: normal;
+    margin-top:1px;
+}
+
+.rank_row{
     font-size: medium;
     font-weight: bold;
     margin-top:1px;

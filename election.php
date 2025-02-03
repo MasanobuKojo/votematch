@@ -4,7 +4,8 @@
         //検証
         $election_id = htmlspecialchars($_POST["election_id"]);
         //DB接続
-        $mysqli = new mysqli("localhost", "root", "", "nushisama_choice", 3306);
+        $ini_array = parse_ini_file("setting.ini");
+        $mysqli = new mysqli($ini_array["DB_HOST"], $ini_array["DB_USER"], $ini_array["DB_PASS"], $ini_array["DB_NAME"], $ini_array["DB_PORT"]);
         if($mysqli->connect_error){
             echo $mysqli->connect_error;
             exit();
@@ -38,18 +39,18 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $election_name; ?>|王の選択</title>
+    <title><?php echo $election_name; ?>|市民の選択</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" href="favicon.ico">
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body>
-    <header id="title_head">ボートマッチングアプリ | 王の選択</header><br/>
+    <header id="title_head">ボートマッチングアプリ | 市民の選択</header><br/>
     <div id="election_name"><?php echo $election_name; ?></div>
     <div id="election_dates">告示：<?php echo date_format(date_create_from_format('Y-m-d', $start_date),'Y年n月j日'); ?>　投開票：<?php echo date_format(date_create_from_format('Y-m-d', $election_date),'Y年n月j日'); ?></div>
     <div id="today">本日：<?php echo date("Y年n月j日"); ?></div>
-    <div id="message">「王様、ご用命をどうぞ」</div>
+    <div id="message">選択してください</div>
     <form method="POST">
       <input type="hidden" name="election_id" value="<?php echo $election_id; ?>" />
       <input type="submit" class="election_view_button" id="start_matching" formaction="./answer.php" value="マッチングを始める" />

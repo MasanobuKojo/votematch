@@ -4,7 +4,8 @@
         //検証
         $election_id = htmlspecialchars($_POST["election_id"]);
         //DB接続
-        $mysqli = new mysqli("localhost", "root", "", "nushisama_choice", 3306);
+        $ini_array = parse_ini_file("setting.ini");
+        $mysqli = new mysqli($ini_array["DB_HOST"], $ini_array["DB_USER"], $ini_array["DB_PASS"], $ini_array["DB_NAME"], $ini_array["DB_PORT"]);
         if($mysqli->connect_error){
             echo $mysqli->connect_error;
             exit();
@@ -163,23 +164,18 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $election_name; ?>|王の選択</title>
+    <title><?php echo $election_name; ?>|市民の選択</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" href="favicon.ico">
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body id="answer">
-    <header id="title_head">ボートマッチングアプリ | 王の選択</header><br/>
+    <header id="title_head">ボートマッチングアプリ | 市民の選択</header><br/>
     <div id="election_name"><?php echo $election_name; ?></div>
     <div id="election_dates">告示：<?php echo date_format(date_create_from_format('Y-m-d', $start_date),'Y年n月j日'); ?>　投開票：<?php echo date_format(date_create_from_format('Y-m-d', $election_date),'Y年n月j日'); ?></div>
     <div id="today">本日：<?php echo date("Y年n月j日"); ?></div>
-    <div id="message">
     <h2>マッチング結果</h2>
-    <p>「王様、しもべ（候補者）のマッチ度は下記のとおりとなりました。」</p>
-    <p>「投票の参考になされてください。」</p>
-    <p>「よもや、投票に行くことをお忘れなく！」</p>
-    </div>
     <form method="POST" id="confirm" action="./result.php" >
         <input type="hidden" name="election_id" value="<?php echo $election_id; ?>" />
         <input type="hidden" name="answers" value="<?php echo htmlspecialchars($_POST["answers"]); ?>" />
@@ -195,8 +191,9 @@
                         <div class="q_row">
                             <?php foreach($match_info as $inf): ?>
                                 <?php if($inf[0] == $answers[$n] && $inf[3] == $match_data[$i-1][0]): ?>
-                                    <p><div class="policy"><?php echo $inf[1]; ?></div>　王様：<?php echo $n+1; ?>位 / 候補者：<?php echo $inf[4]; ?>位<br/>
-                                    候補者コメント：<?php if($inf[5] != "") echo "「".$inf[5]."」"; else echo "なし"; ?></p>
+                                    <div class="policy"><?php echo $inf[1]; ?></div>
+                                    <div class="rank_row">あなた：<?php echo $n+1; ?>位 / 候補者：<?php echo $inf[4]; ?>位</div>
+                                    <div class="rank_comment">候補者コメント：<?php if($inf[5] != "") echo "「".$inf[5]."」"; else echo "なし"; ?></div>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
@@ -223,6 +220,10 @@
                 </div>
             </div> 
         <?php endfor; ?>
+        <div id="message">
+        <p>投票の参考にされてください。<br/>
+        そして、必ず投票に行きましょう！</p>
+        </div>
         <div class="button_area">
             <input type="submit" class="button" id="backto_answer" formaction="./answer.php" value="選びなおす" />
             <input type="submit" class="button" id="show_election" formaction="./election.php" value="選挙に戻る" />
